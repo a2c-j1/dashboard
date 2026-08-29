@@ -29,6 +29,7 @@
     "vscode": {
       "extensions": [
         "openai.chatgpt",
+        "github.vscode-pull-request-github",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "ms-azuretools.vscode-docker",
