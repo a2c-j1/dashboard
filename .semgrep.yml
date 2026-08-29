@@ -9,3 +9,33 @@ rules:
           if (import.meta.env.DEV) {
             console.log(...)
           }
+  - id: no-direct-web-fetch
+    languages: [typescript, tsx]
+    message: Use the centralized API client in apps/web/src/api.ts instead of calling fetch directly.
+    severity: ERROR
+    paths:
+      include:
+        - apps/web/src/**/*.ts
+        - apps/web/src/**/*.tsx
+      exclude:
+        - apps/web/src/api.ts
+    patterns:
+      - pattern: fetch(...)
+  - id: no-eval
+    languages: [typescript, tsx]
+    message: Avoid dynamic code execution with eval.
+    severity: ERROR
+    paths:
+      include:
+        - '**/*.ts'
+        - '**/*.tsx'
+    pattern: eval(...)
+  - id: no-new-function
+    languages: [typescript, tsx]
+    message: Avoid dynamic code execution with the Function constructor.
+    severity: ERROR
+    paths:
+      include:
+        - '**/*.ts'
+        - '**/*.tsx'
+    pattern: new Function(...)

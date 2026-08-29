@@ -3,9 +3,6 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(js.configs.recommended, ...tseslint.configs.recommended, {
   ignores: ['dist/'],
-  languageOptions: {
-    globals: { document: 'readonly', window: 'readonly' },
-  },
   rules: {
     '@typescript-eslint/consistent-type-imports': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
