@@ -8,6 +8,8 @@
     "packages/*"
   ],
   "scripts": {
+    "storage:up": "docker compose up -d seaweedfs",
+    "storage:down": "docker compose stop seaweedfs",
     "dev": "npm run build -w @dashboard/schemas && concurrently -n web,api -c cyan,magenta \"npm run dev -w @dashboard/web\" \"npm run dev -w @dashboard/api\"",
     "build": "npm run build -w @dashboard/schemas && npm run build -w @dashboard/api && npm run build -w @dashboard/web",
     "test": "npm run build -w @dashboard/schemas && npm run test --workspaces --if-present",

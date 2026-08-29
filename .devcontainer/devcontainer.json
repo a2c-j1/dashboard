@@ -1,14 +1,26 @@
 {
-  "name": "dashboard",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-24-bookworm",
+  "name": "Dashboard",
+  "dockerComposeFile": "../compose.yaml",
+  "service": "workspace",
+  "workspaceFolder": "/workspaces/dashboard",
   "features": {
-    "ghcr.io/devcontainers/features/git:1": {}
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
-  "postCreateCommand": "npm install && pip3 install --user semgrep && npx playwright install --with-deps chromium",
-  "forwardPorts": [5173, 8787],
+  "forwardPorts": [5173, 8787, 8333, 23646],
   "portsAttributes": {
-    "5173": { "label": "Vite web" },
-    "8787": { "label": "Hono API" }
+    "5173": {
+      "label": "Dashboard web"
+    },
+    "8787": {
+      "label": "Dashboard API"
+    },
+    "8333": {
+      "label": "SeaweedFS S3 API"
+    },
+    "23646": {
+      "label": "SeaweedFS admin UI"
+    }
   },
   "customizations": {
     "vscode": {
@@ -18,5 +30,7 @@
         "ms-azuretools.vscode-docker"
       ]
     }
-  }
+  },
+  "postCreateCommand": "npm ci && npm run prisma:generate -w @dashboard/api && pip3 install --user semgrep && npx playwright install --with-deps chromium",
+  "remoteUser": "node"
 }

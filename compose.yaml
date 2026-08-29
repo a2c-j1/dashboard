@@ -1,0 +1,30 @@
+services:
+  seaweedfs:
+    image: chrislusf/seaweedfs:4.29
+    environment:
+      AWS_ACCESS_KEY_ID: dashboard-dev
+      AWS_SECRET_ACCESS_KEY: dashboard-dev-secret
+      S3_BUCKET: dashboard-dev
+    ports:
+      - '8333:8333'
+      - '23646:23646'
+    volumes:
+      - seaweedfs-data:/data
+
+  workspace:
+    build:
+      context: .devcontainer
+      dockerfile: Dockerfile
+    command: sleep infinity
+    environment:
+      S3_ACCESS_KEY_ID: dashboard-dev
+      S3_BUCKET: dashboard-dev
+      S3_ENDPOINT: http://seaweedfs:8333
+      S3_REGION: us-east-1
+      S3_SECRET_ACCESS_KEY: dashboard-dev-secret
+    volumes:
+      - .:/workspaces/dashboard:cached
+    working_dir: /workspaces/dashboard
+
+volumes:
+  seaweedfs-data:
