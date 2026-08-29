@@ -1,6 +1,6 @@
 {
-  "name": "Dashboard",
-  "dockerComposeFile": "../compose.yaml",
+  "name": "Dashboard Development",
+  "dockerComposeFile": ["../compose.yaml", "compose.devcontainer.yaml"],
   "service": "workspace",
   "workspaceFolder": "/workspaces/dashboard",
   "features": {
@@ -31,6 +31,6 @@
       ]
     }
   },
-  "postCreateCommand": "npm ci && npm run prisma:generate -w @dashboard/api && pip3 install --user semgrep && npx playwright install --with-deps chromium",
+  "postCreateCommand": "./scripts/bootstrap-development.sh",
   "remoteUser": "node"
 }
