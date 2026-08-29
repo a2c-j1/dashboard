@@ -1,0 +1,11 @@
+rules:
+  - id: no-console-log-in-production
+    languages: [typescript]
+    message: Avoid console.log in production code.
+    severity: WARNING
+    patterns:
+      - pattern: console.log(...)
+      - pattern-not-inside: |
+          if (import.meta.env.DEV) {
+            console.log(...)
+          }

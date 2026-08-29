@@ -1,0 +1,33 @@
+{
+  "name": "@dashboard/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@stylexjs/stylex": "^0.19.0",
+    "@stylexjs/unplugin": "^0.19.0",
+    "@tanstack/react-query": "^5.102.8",
+    "@vitejs/plugin-react": "^4.4.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "eslint": "^9.24.0",
+    "jsdom": "^26.0.0",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^7.1.7",
+    "vitest": "^3.1.2"
+  }
+}

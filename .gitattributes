@@ -1,0 +1,5 @@
+* text=auto eol=lf
+*.ts text diff=typescript
+*.tsx text diff=typescript
+*.json text diff=json
+*.lock -text

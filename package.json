@@ -1,0 +1,26 @@
+{
+  "name": "dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "npm@11.12.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run build -w @dashboard/schemas && concurrently -n web,api -c cyan,magenta \"npm run dev -w @dashboard/web\" \"npm run dev -w @dashboard/api\"",
+    "build": "npm run build -w @dashboard/schemas && npm run build -w @dashboard/api && npm run build -w @dashboard/web",
+    "test": "npm run build -w @dashboard/schemas && npm run test --workspaces --if-present",
+    "test:e2e": "npm run build -w @dashboard/schemas && playwright test",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "semgrep": "semgrep --config .semgrep.yml"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "concurrently": "^9.1.2",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
+  }
+}
