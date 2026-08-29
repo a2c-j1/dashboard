@@ -1,4 +1,3 @@
-name: dashboard-devcontainer
+name: '${COMPOSE_PROJECT_NAME:?COMPOSE_PROJECT_NAME must be set}'
 
-services:
-  workspace: {}
+services: {}

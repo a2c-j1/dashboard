@@ -1,6 +1,6 @@
 {
   "name": "Dashboard Development",
-  "dockerComposeFile": ["../compose.yaml", "compose.devcontainer.yaml"],
+  "dockerComposeFile": ["compose.devcontainer.yaml", "../compose.yaml"],
   "service": "workspace",
   "workspaceFolder": "/workspaces/dashboard",
   "features": {
@@ -42,6 +42,7 @@
       ]
     }
   },
+  "initializeCommand": "./scripts/write-devcontainer-project-env.sh",
   "postCreateCommand": "./scripts/bootstrap-development.sh",
   "remoteUser": "node"
 }
