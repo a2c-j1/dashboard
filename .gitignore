@@ -6,6 +6,7 @@ test-results/
 .env
 .env.*
 !.env.example
+.certs/
 .devcontainer/.env
 prisma/dev.db
 prisma/dev.db-journal

@@ -12,7 +12,36 @@ npm run prisma:migrate -w @dashboard/api
 npm run dev
 ```
 
-Open http://localhost:5173. The API health endpoint is http://localhost:8787/api/health.
+The existing `npm run dev` command remains available for HTTP-only development.
+For HTTPS development, generate the local self-signed certificate and start both
+servers with one command:
+
+```sh
+npm run dev:https
+```
+
+Open https://localhost:5173 (accept the locally generated certificate warning).
+The Vite proxy forwards `/api` to the HTTPS API at
+https://localhost:8787/api/health. `npm run setup:tls` can be run separately;
+it is idempotent and stores the ignored key/certificate pair in `.certs/`.
+
+To open the development site from an iPad on the same network, add the Mac's
+LAN address (or a resolvable LAN hostname) to the certificate before starting
+the servers. The HTTPS Vite server listens on the LAN in this mode.
+
+```sh
+DEV_CERT_HOSTS="localhost,127.0.0.1,::1,192.168.1.42" npm run dev:https
+```
+
+Install `.certs/localhost-ca.pem` on the iPad once, then enable full trust for
+the **Dashboard Local Development CA** in iPadOS certificate trust settings.
+Open `https://192.168.1.42:5173` afterwards. Re-run the command with the same
+`DEV_CERT_HOSTS` value when the LAN address changes; only the server
+certificate is regenerated, so the iPad's trusted development CA remains
+valid.
+
+The certificate is for local development only and is not suitable for
+production. CI runs the same OpenSSL setup before its quality checks.
 
 ### Object storage
 

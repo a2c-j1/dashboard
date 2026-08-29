@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "dev:https": "TLS_CERT=../../.certs/localhost.pem TLS_KEY=../../.certs/localhost-key.pem tsx watch src/server.ts",
     "dev:debug": "tsx watch --inspect=9229 src/server.ts",
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
