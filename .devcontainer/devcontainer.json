@@ -26,6 +26,9 @@
     }
   },
   "customizations": {
+    "zed": {
+      "extensions": ["toml", "prisma"]
+    },
     "vscode": {
       "extensions": [
         "openai.chatgpt",
