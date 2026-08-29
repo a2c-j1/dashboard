@@ -7,13 +7,16 @@
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
-  "forwardPorts": [5173, 8787, 8333, 23646],
+  "forwardPorts": [5173, 8787, 8333, 9229, 23646],
   "portsAttributes": {
     "5173": {
       "label": "Dashboard web"
     },
     "8787": {
       "label": "Dashboard API"
+    },
+    "9229": {
+      "label": "Dashboard API debugger"
     },
     "8333": {
       "label": "SeaweedFS S3 API"
@@ -25,9 +28,16 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "openai.chatgpt",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+        "prisma.prisma",
+        "vitest.explorer",
+        "ms-playwright.playwright",
+        "yash-singh.stylex"
       ]
     }
   },

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "dev:debug": "tsx watch --inspect=9229 src/server.ts",
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
     "test:integration": "RUN_INTEGRATION_TESTS=1 vitest run test/*.integration.test.ts",

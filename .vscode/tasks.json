@@ -1,0 +1,73 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dev: Start Dashboard",
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "dashboard",
+        "pattern": [{ "regexp": "^$" }],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "http://localhost:5173"
+        }
+      },
+      "presentation": {
+        "group": "dashboard",
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Dev: Start Dashboard (Debug API)",
+      "type": "npm",
+      "script": "dev:debug",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "dashboard",
+        "pattern": [{ "regexp": "^$" }],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Debugger listening on",
+          "endsPattern": "API listening on"
+        }
+      },
+      "presentation": {
+        "group": "dashboard-debug",
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Quality: Test",
+      "type": "npm",
+      "script": "test",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Quality: Lint",
+      "type": "npm",
+      "script": "lint",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Quality: End-to-end Tests",
+      "type": "npm",
+      "script": "test:e2e",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Quality: Build",
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}

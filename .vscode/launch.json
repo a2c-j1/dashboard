@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug API (watch)",
+      "type": "pwa-node",
+      "request": "attach",
+      "address": "localhost",
+      "port": 9229,
+      "restart": true,
+      "preLaunchTask": "Dev: Start Dashboard (Debug API)",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug Web (Chrome)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/apps/web/src",
+      "preLaunchTask": "Dev: Start Dashboard"
+    },
+    {
+      "name": "Debug Web (Chrome, existing server)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/apps/web/src"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Full Stack",
+      "configurations": ["Debug API (watch)", "Debug Web (Chrome, existing server)"],
+      "stopAll": true
+    }
+  ]
+}
