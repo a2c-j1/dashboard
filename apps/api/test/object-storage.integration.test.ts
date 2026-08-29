@@ -8,28 +8,37 @@ import {
 } from './support/integration.js';
 
 const describeIntegration = process.env.RUN_INTEGRATION_TESTS === '1' ? describe : describe.skip;
+const containerStartupTimeout = 60_000;
 
 describeIntegration('object storage integration', () => {
-  let seaweedFs: SeaweedFsContainer;
-  let sandbox: IntegrationTestSandbox;
+  let seaweedFs: SeaweedFsContainer | undefined;
+  let sandbox: IntegrationTestSandbox | undefined;
 
   beforeAll(async () => {
     seaweedFs = await startSeaweedFs();
-  });
+  }, containerStartupTimeout);
 
   beforeEach(async () => {
+    if (!seaweedFs) {
+      throw new Error('SeaweedFS container did not start');
+    }
+
     sandbox = await createIntegrationTestSandbox(seaweedFs);
   });
 
   afterEach(async () => {
-    await sandbox.cleanup();
+    await sandbox?.cleanup();
   });
 
   afterAll(async () => {
-    await seaweedFs.container.stop();
+    await seaweedFs?.container.stop();
   });
 
   it('isolates an S3 object and SQLite record for this test', async () => {
+    if (!sandbox) {
+      throw new Error('Integration test sandbox was not created');
+    }
+
     await sandbox.s3.send(
       new PutObjectCommand({
         Body: 'test payload',

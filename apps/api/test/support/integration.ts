@@ -8,7 +8,6 @@ import {
 import { PrismaClient } from '@prisma/client';
 import { execFile } from 'node:child_process';
 import { mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { GenericContainer, type StartedTestContainer, Wait } from 'testcontainers';
@@ -16,6 +15,7 @@ import { GenericContainer, type StartedTestContainer, Wait } from 'testcontainer
 const execFileAsync = promisify(execFile);
 const apiDirectory = resolve(import.meta.dirname, '../..');
 const prismaCli = resolve(apiDirectory, '../../node_modules/.bin/prisma');
+const integrationTestTmpDirectory = process.env.INTEGRATION_TEST_TMPDIR ?? '/tmp';
 
 const credentials = {
   accessKeyId: 'test-access-key',
@@ -53,10 +53,11 @@ export async function startSeaweedFs(): Promise<SeaweedFsContainer> {
 export async function createIntegrationTestSandbox(
   seaweedFs: SeaweedFsContainer,
 ): Promise<IntegrationTestSandbox> {
-  const directory = await mkdtemp(join(tmpdir(), 'dashboard-api-test-'));
+  const directory = await mkdtemp(join(integrationTestTmpDirectory, 'dashboard-api-test-'));
   const databasePath = join(directory, 'test.db');
   const databaseUrl = `file:${databasePath}`;
   const bucket = `test-${crypto.randomUUID()}`;
+  const prismaEnvironment = { ...process.env, DATABASE_URL: databaseUrl };
   const s3 = new S3Client({
     credentials,
     endpoint: seaweedFs.endpoint,
@@ -64,10 +65,17 @@ export async function createIntegrationTestSandbox(
     region: 'us-east-1',
   });
 
-  await execFileAsync(prismaCli, ['db', 'push', '--skip-generate'], {
-    cwd: apiDirectory,
-    env: { ...process.env, DATABASE_URL: databaseUrl },
-  });
+  delete prismaEnvironment.RUST_LOG;
+
+  try {
+    await execFileAsync(prismaCli, ['db', 'push', '--skip-generate'], {
+      cwd: apiDirectory,
+      env: prismaEnvironment,
+    });
+  } catch (error) {
+    await rm(directory, { force: true, recursive: true });
+    throw error;
+  }
 
   const prisma = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
   await s3.send(new CreateBucketCommand({ Bucket: bucket }));

@@ -8,7 +8,7 @@
     "dev:debug": "tsx watch --inspect=9229 src/server.ts",
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
-    "test:integration": "RUN_INTEGRATION_TESTS=1 vitest run test/*.integration.test.ts",
+    "test:integration": "npm run prisma:generate && RUN_INTEGRATION_TESTS=1 vitest run test/*.integration.test.ts",
     "test:watch": "vitest",
     "lint": "eslint src test",
     "prisma:generate": "prisma generate",
