@@ -1,0 +1,73 @@
+name: テンプレート改善
+description: このリポジトリを再利用可能なテンプレートとして改善する
+labels:
+  - template
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        React/Vite + Hono のスターターを、次のプロジェクトで迷わず使える形にするための提案を記入してください。
+
+  - type: checkboxes
+    id: duplicate-check
+    attributes:
+      label: 事前確認
+      options:
+        - label: 既存のIssueを検索し、同じ提案がないことを確認しました。
+          required: true
+
+  - type: dropdown
+    id: target-mode
+    attributes:
+      label: 対象モード
+      description: 改善対象の構成を選択してください。
+      options:
+        - 最小構成
+        - フル構成（Docker・HTTPS・ストレージ等）
+        - 両方
+    validations:
+      required: true
+
+  - type: textarea
+    id: replacement-targets
+    attributes:
+      label: 置換対象
+      description: アプリ名、パッケージ名、ポート、DB、ストレージ、リンクなど、置き換えたい項目を記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: onboarding-experience
+    attributes:
+      label: 期待する導入体験
+      description: クローンから起動・設定・最初の変更まで、利用者にどう進んでほしいか記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: 受け入れ条件
+      description: 完了と判断できる具体的な条件を箇条書きで記入してください。
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: quality-checks
+    attributes:
+      label: 品質確認
+      description: 必要な確認方法を選択し、補足があれば下欄に記入してください。
+      options:
+        - label: "`npm run format:check`"
+        - label: "`npm run lint`"
+        - label: "`npm test`"
+        - label: "`npm run build`"
+        - label: "`npm run test:e2e`"
+        - label: "`npm run semgrep`（セキュリティ関連の場合）"
+
+  - type: textarea
+    id: quality-notes
+    attributes:
+      label: 品質確認の補足
+      description: 実行環境（Node.js 24、npm、Docker、HTTPS等）や確認結果を記入してください。

@@ -1,0 +1,69 @@
+name: 機能提案
+description: 新しい機能や改善を提案する
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        このリポジトリを利用する人にとっての価値と、実現したい体験を具体的に記入してください。
+
+  - type: checkboxes
+    id: duplicate-check
+    attributes:
+      label: 事前確認
+      options:
+        - label: 既存のIssueを検索し、同じ提案がないことを確認しました。
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 解決したい課題
+      description: 現在困っていること、または満たせていないニーズを記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 提案内容
+      description: どのような機能・変更を提案するか記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: users-scenario
+    attributes:
+      label: 対象者・利用シナリオ
+      description: 誰が、どのような状況で、どう使うのか記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 検討した代替案
+      description: 他に検討した方法や、採用しなかった理由があれば記入してください。
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: 受け入れ条件
+      description: 完了と判断できる具体的な条件を箇条書きで記入してください。
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: 想定する影響範囲
+      description: 該当するものを選択してください。未確定でも構いません。
+      options:
+        - label: 公開API
+        - label: 共有スキーマ
+        - label: DB・マイグレーション
+        - label: 認証・認可
+        - label: CI・品質チェック
+        - label: 新規外部依存
+        - label: 上記以外／影響なし

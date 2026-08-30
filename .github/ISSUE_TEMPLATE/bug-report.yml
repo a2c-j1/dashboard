@@ -1,0 +1,79 @@
+name: バグ報告
+description: 再現可能な不具合を報告する
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        報告ありがとうございます。再現に必要な情報をできるだけ具体的に記入してください。
+        ログや画面キャプチャに秘密情報、認証情報、`.env` の内容を含めないでください。
+
+  - type: checkboxes
+    id: duplicate-check
+    attributes:
+      label: 事前確認
+      options:
+        - label: 既存のIssueを検索し、同じ内容のIssueがないことを確認しました。
+          required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 再現手順
+      description: 発生するまでの操作を順番に記入してください。
+      placeholder: |
+        1. `npm install` を実行
+        2. `npm run dev` を実行
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待した結果
+      description: 本来どう動作するべきだったかを記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の結果
+      description: 実際に起きたこと、エラーメッセージを記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 実行環境
+      description: OS、Node.js、npm、起動モード（HTTP/HTTPS、Docker/ローカル等）を記入してください。
+      placeholder: |
+        - OS: macOS 15.x
+        - Node.js: 24.x
+        - npm: 11.x
+        - 起動モード: `npm run dev` / `npm run dev:https` / Docker
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: 再現性
+      options:
+        - 毎回再現する
+        - 高い頻度で再現する
+        - まれに再現する
+        - 一度だけ発生した
+        - 再現手順を確立できていない
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: ログ・画面キャプチャ
+      description: 関連するログ、スタックトレース、画面キャプチャを貼ってください。秘密情報や `.env` の内容は必ず削除してください。
+      render: text
