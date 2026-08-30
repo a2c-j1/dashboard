@@ -1,8 +1,26 @@
 # Dashboard
 
-React/Vite frontend and Hono/Prisma/SQLite API in an npm workspace.
+A small, local-first dashboard for keeping a useful set of information and
+destinations in one place. The web screen shows a live 24-hour clock, reports
+whether its API is online, and provides quick links to YouTube, X, ChatGPT, and
+Claude.
 
-## Development
+This repository is for people who want to try the dashboard locally or
+continue developing it. It contains a React/Vite frontend and a Hono API in an
+npm workspace.
+
+## What you can try
+
+- Watch the clock update every second in your browser's local time.
+- See the API connection status change between `API online` and
+  `API connecting…`.
+- Open YouTube, X, ChatGPT, or Claude from the dashboard.
+- Check the API health response and generated OpenAPI document while developing.
+
+## Quick start
+
+Requirements: Node.js 24, npm, and Docker (for the local object-storage
+service).
 
 ```sh
 npm install
@@ -12,58 +30,44 @@ npm run prisma:migrate -w @dashboard/api
 npm run dev
 ```
 
-In VS Code, `Dev: Start Dashboard` and `Dev: Start Dashboard (HTTPS)` are
-background tasks. Stop a host-run watcher with **Tasks: Terminate Task** and
-select the corresponding task; do not use a broad `pkill`, which could stop
-unrelated work.
+Then open [http://localhost:5173](http://localhost:5173). The API is available
+at [http://localhost:8787/api/health](http://localhost:8787/api/health), and its
+OpenAPI document is at [http://localhost:8787/api/doc](http://localhost:8787/api/doc).
 
-For the containerized public stack, use the root Compose file. It publishes the
-web app on `http://localhost:5173` and the API on `http://localhost:8787`:
+When you are finished, stop the object-storage service with:
 
 ```sh
-./scripts/compose-up.sh
+npm run storage:down
 ```
 
-Stop it with `./scripts/compose-down.sh`. To switch modes safely, use
-`./scripts/compose-restart.sh` for HTTP or `./scripts/compose-restart-https.sh`
-for HTTPS; each stops the current public stack first and preserves named
-volumes. `scripts/compose-exec.sh` runs a
-command in its utility workspace container; use `npm run dev` on the host for
-the usual HTTP development workflow. Override the public host ports with
-`DASHBOARD_WEB_PORT` and `DASHBOARD_API_PORT` when needed.
+The first start may take a moment while the services and generated Prisma
+client become ready. The links in the dashboard open external sites in a new
+browser tab.
 
-The Codex Docker Compose environment provides HTTP/HTTPS run, stop, and restart
-actions. The public modes intentionally share ports and cannot run at the same
-time, so use the matching restart action when switching modes.
+<details>
+<summary>Development and operations</summary>
 
-For the public Compose stack over HTTPS, use the dedicated HTTPS overlay. It
-generates the local certificate before starting the services and keeps the
-same host ports (`5173` for web and `8787` for API):
+### HTTP and HTTPS development
 
-```sh
-./scripts/compose-up-https.sh
-```
+The usual `npm run dev` workflow serves the web app over HTTP and proxies
+`/api` to the API at `http://localhost:8787`.
 
-Open `https://localhost:5173` and `https://localhost:8787/api/health`.
-Stop it with `./scripts/compose-down.sh`; do not run the HTTP and HTTPS public
-stacks at the same time because they intentionally share ports.
-
-The existing `npm run dev` command remains available for HTTP-only development.
-For HTTPS development, generate the local self-signed certificate and start both
+For local HTTPS, generate a self-signed development certificate and start both
 servers with one command:
 
 ```sh
 npm run dev:https
 ```
 
-Open https://localhost:5173 (accept the locally generated certificate warning).
-The Vite proxy forwards `/api` to the HTTPS API at
-https://localhost:8787/api/health. `npm run setup:tls` can be run separately;
-it is idempotent and stores the ignored key/certificate pair in `.certs/`.
+Open [https://localhost:5173](https://localhost:5173) and accept the local
+certificate warning. The HTTPS API health endpoint is
+[https://localhost:8787/api/health](https://localhost:8787/api/health).
+`npm run setup:tls` can be run separately; it is idempotent and stores the
+ignored key/certificate pair in `.certs/`.
 
-To open the development site from an iPad on the same network, add the Mac's
-LAN address (or a resolvable LAN hostname) to the certificate before starting
-the servers. The HTTPS Vite server listens on the LAN in this mode.
+To open the HTTPS development site from an iPad on the same network, include
+the Mac's LAN address (or a resolvable LAN hostname) in the certificate before
+starting the servers:
 
 ```sh
 DEV_CERT_HOSTS="localhost,127.0.0.1,::1,192.168.1.42" npm run dev:https
@@ -72,87 +76,115 @@ DEV_CERT_HOSTS="localhost,127.0.0.1,::1,192.168.1.42" npm run dev:https
 Install `.certs/localhost-ca.pem` on the iPad once, then enable full trust for
 the **Dashboard Local Development CA** in iPadOS certificate trust settings.
 Open `https://192.168.1.42:5173` afterwards. Re-run the command with the same
-`DEV_CERT_HOSTS` value when the LAN address changes; only the server
-certificate is regenerated, so the iPad's trusted development CA remains
-valid.
+`DEV_CERT_HOSTS` value when the LAN address changes. The certificate is for
+local development only and is not suitable for production.
 
-The certificate is for local development only and is not suitable for
-production. CI runs the same OpenSSL setup before its quality checks.
+In VS Code, `Dev: Start Dashboard` and `Dev: Start Dashboard (HTTPS)` are
+background tasks. Stop a host-run watcher with **Tasks: Terminate Task** and
+select the corresponding task.
+
+### Containerized public stack
+
+The root Compose file can run the web and API services together. It publishes
+the web app on port `5173` and the API on port `8787`:
+
+```sh
+./scripts/compose-up.sh
+```
+
+Stop it with `./scripts/compose-down.sh`. To switch modes safely, use
+`./scripts/compose-restart.sh` for HTTP or
+`./scripts/compose-restart-https.sh` for HTTPS; each stops the current public
+stack first and preserves named volumes. `scripts/compose-exec.sh` runs a
+command in its utility workspace container. Override the public host ports with
+`DASHBOARD_WEB_PORT` and `DASHBOARD_API_PORT` when needed.
+
+For the HTTPS public Compose stack, use the dedicated overlay:
+
+```sh
+./scripts/compose-up-https.sh
+```
+
+It generates the local certificate before starting services. Open
+`https://localhost:5173` and
+`https://localhost:8787/api/health`. HTTP and HTTPS public stacks share ports
+and cannot run at the same time. The Codex Docker Compose environment provides
+matching HTTP/HTTPS run, stop, and restart actions.
 
 ### Object storage
 
-Local development uses SeaweedFS through its S3-compatible API. It starts with
-the development stack and exposes the S3 endpoint on `http://localhost:8333`.
-The pre-created bucket is `dashboard-dev`; its development credentials are in
+Local development uses SeaweedFS through its S3-compatible API. The development
+stack exposes S3 at `http://localhost:8333`, with the pre-created bucket
+`dashboard-dev`. Development credentials are in
 [`apps/api/.env.example`](apps/api/.env.example).
 
 ```sh
 npm run storage:up
 ```
 
-The administration UI is available at `http://localhost:23646`. Stop the
-storage service with `npm run storage:down`. Its data stays in the named Docker
-volume, and can be removed explicitly with `docker compose down --volumes`.
+The administration UI is at `http://localhost:23646`. Stop the service with
+`npm run storage:down`. Its data stays in a named Docker volume; remove that
+volume explicitly with `docker compose down --volumes` when needed.
 
 ### Dev Container
 
-Open this repository with the **Reopen in Container** command. The Dev Container
-starts the same SeaweedFS service and configures the API process with
-`S3_ENDPOINT=http://seaweedfs:8333`; do not change it to `localhost` from inside
-the container. Dependencies and the Prisma client are installed automatically.
+Open this repository with **Reopen in Container**. The Dev Container starts the
+same SeaweedFS service and configures the API with
+`S3_ENDPOINT=http://seaweedfs:8333`; use `seaweedfs`, not `localhost`, from
+inside the container. Dependencies and the Prisma client are installed
+automatically.
+
 Its workspace publishes the web app on `http://localhost:5174`, the API on
-`http://localhost:8788`, and SeaweedFS on ports 8334/23647, so it can run beside
-the public Compose stack. Start it manually with `./scripts/devcontainer-up.sh`
-when using Codex or another client without automatic Dev Container lifecycle
-support, then run `./scripts/devcontainer-exec.sh npm run dev`. Override its
-host ports with `DEVCONTAINER_WEB_PORT`, `DEVCONTAINER_API_PORT`,
-`DEVCONTAINER_STORAGE_PORT`, and `DEVCONTAINER_STORAGE_ADMIN_PORT`.
+`http://localhost:8788`, and SeaweedFS on ports `8334`/`23647`, so it can run
+beside the public Compose stack. Start it manually with
+`./scripts/devcontainer-up.sh` when lifecycle support is unavailable, then run
+`./scripts/devcontainer-exec.sh npm run dev`. Override its host ports with
+`DEVCONTAINER_WEB_PORT`, `DEVCONTAINER_API_PORT`, `DEVCONTAINER_STORAGE_PORT`,
+and `DEVCONTAINER_STORAGE_ADMIN_PORT`.
+
 For HTTPS in this environment, use `./scripts/devcontainer-up-https.sh`; it
 generates the certificate inside the workspace and starts both TLS servers.
-Open `https://localhost:5174` and `https://localhost:8788/api/health`.
-The HTTP and HTTPS commands keep the development server in the foreground. Use
-`./scripts/devcontainer-down.sh` to stop the container, or use
-`./scripts/devcontainer-restart.sh` / `./scripts/devcontainer-restart-https.sh`
-to stop, recreate, and start the selected mode. The restart commands therefore
-also remain attached to the server process until it is stopped.
-The Codex Dev Container environment keeps `Run Dashboard` for HTTP and adds
-`Run Dashboard (HTTPS)`. VS Code provides matching HTTP/HTTPS Chrome launch
-configurations. To stop or restart from Zed, use the same scripts from its
-terminal (`devcontainer-down.sh`, `devcontainer-restart.sh`, or
-`devcontainer-restart-https.sh`); no Zed-specific task configuration is
-required.
-The Dev Container and public Compose HTTPS flows use the same ignored `.certs`
+Open `https://localhost:5174` and
+`https://localhost:8788/api/health`. Use
+`./scripts/devcontainer-down.sh` to stop the container, or
+`./scripts/devcontainer-restart.sh` /
+`./scripts/devcontainer-restart-https.sh` to recreate and start the selected
+mode. The restart commands remain attached to the server process until it is
+stopped.
+
+The Dev Container and public Compose HTTPS flows share the ignored `.certs`
 directory and local CA. Install and explicitly trust
-`.certs/localhost-ca.pem` in your browser or device to remove the warning.
-It also provides Docker access to Testcontainers through the host Docker socket.
+`.certs/localhost-ca.pem` in your browser or device to remove the warning. The
+container also provides Docker access to Testcontainers through the host Docker
+socket.
 
 ### Integration-test sample
 
 The API includes an opt-in SeaweedFS and SQLite integration-test sample. It
-starts a disposable SeaweedFS container once per suite, creates a new bucket and
-SQLite database for every test, then deletes both during cleanup. This protects
-the development bucket and `dev.db` from test data.
+starts a disposable SeaweedFS container once per suite, creates a new bucket
+and SQLite database for every test, then cleans both up. Docker must be running.
 
 ```sh
 npm run test:integration -w @dashboard/api
 ```
 
-Docker must be running. The regular `npm test` command skips these integration
-tests, so it remains usable where Docker is unavailable.
+The regular `npm test` command skips these integration tests, so it remains
+usable where Docker is unavailable.
+
+</details>
 
 ## Quality checks
 
 ```sh
+npm run format:check
 npm run lint
 npm test
-npm run format:check
-npm run semgrep
+npm run build
 npm run test:e2e
+npm run semgrep
 ```
 
-GitHub Actions runs these checks with the HTTPS certificate setup in the Node
-quality job. Semgrep runs independently in the official `semgrep/semgrep`
-container on pull requests, pushes to `main`, manual dispatches, and a daily
-scheduled scan.
-
-The OpenAPI document is available at `http://localhost:8787/api/doc` during development.
+GitHub Actions runs the quality checks with HTTPS certificate setup in the Node
+quality job. Semgrep runs independently in the official
+`semgrep/semgrep` container on pull requests, pushes to `main`, manual
+dispatches, and a daily scheduled scan.
