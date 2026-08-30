@@ -46,6 +46,6 @@
     }
   },
   "initializeCommand": "./scripts/write-devcontainer-project-env.sh",
-  "postCreateCommand": "./scripts/bootstrap-development.sh",
+  "postCreateCommand": "sudo chown -R node:node /workspaces/dashboard/node_modules && ./scripts/bootstrap-development.sh",
   "remoteUser": "node"
 }
