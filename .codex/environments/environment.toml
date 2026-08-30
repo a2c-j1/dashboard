@@ -27,3 +27,23 @@ command = "./scripts/devcontainer-exec.sh npm run lint"
 name = "End-to-end Tests"
 icon = "test"
 command = "./scripts/devcontainer-exec.sh npm run test:e2e"
+
+[[actions]]
+name = "Format Check"
+icon = "build"
+command = "./scripts/devcontainer-exec.sh npm run format:check"
+
+[[actions]]
+name = "Build"
+icon = "build"
+command = "./scripts/devcontainer-exec.sh npm run build"
+
+[[actions]]
+name = "Integration Tests"
+icon = "test"
+command = "./scripts/devcontainer-exec.sh npm run test:integration -w @dashboard/api"
+
+[[actions]]
+name = "Semgrep"
+icon = "test"
+command = "./scripts/devcontainer-exec.sh npm run semgrep"
