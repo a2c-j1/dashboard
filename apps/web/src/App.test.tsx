@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { App } from './App.js';
+import { App, linkIconName } from './App.js';
 
 describe('App', () => {
   afterEach(() => vi.restoreAllMocks());
@@ -21,5 +21,28 @@ describe('App', () => {
       'https://www.youtube.com/',
     );
     expect(screen.getByRole('link', { name: 'X' })).toHaveAttribute('href', 'https://x.com/');
+    expect(screen.getByRole('link', { name: 'ChatGPT' })).toHaveAttribute(
+      'href',
+      'https://chatgpt.com/',
+    );
+    expect(screen.getByRole('link', { name: 'Claude' })).toHaveAttribute(
+      'href',
+      'https://claude.ai/',
+    );
+
+    for (const label of ['YouTube', 'X', 'ChatGPT', 'Claude']) {
+      expect(screen.getByRole('link', { name: label }).querySelector('svg')).toHaveAttribute(
+        'aria-hidden',
+        'true',
+      );
+    }
+  });
+
+  it('selects brand icons and falls back for custom labels', () => {
+    expect(linkIconName('YouTube')).toBe('youtube');
+    expect(linkIconName('x')).toBe('x');
+    expect(linkIconName('ChatGPT')).toBe('chatgpt');
+    expect(linkIconName('Claude')).toBe('claude');
+    expect(linkIconName('My custom link')).toBe('generic');
   });
 });
