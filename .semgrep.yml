@@ -10,19 +10,19 @@ rules:
             console.log(...)
           }
   - id: no-direct-web-fetch
-    languages: [typescript, tsx]
+    languages: [typescript]
     message: Use the centralized API client in apps/web/src/api.ts instead of calling fetch directly.
     severity: ERROR
     paths:
       include:
-        - apps/web/src/**/*.ts
-        - apps/web/src/**/*.tsx
+        - /apps/web/src/**/*.ts
+        - /apps/web/src/**/*.tsx
       exclude:
-        - apps/web/src/api.ts
+        - /apps/web/src/api.ts
     patterns:
       - pattern: fetch(...)
   - id: no-eval
-    languages: [typescript, tsx]
+    languages: [typescript]
     message: Avoid dynamic code execution with eval.
     severity: ERROR
     paths:
@@ -31,7 +31,7 @@ rules:
         - '**/*.tsx'
     pattern: eval(...)
   - id: no-new-function
-    languages: [typescript, tsx]
+    languages: [typescript]
     message: Avoid dynamic code execution with the Function constructor.
     severity: ERROR
     paths:

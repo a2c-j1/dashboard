@@ -90,4 +90,9 @@ npm run semgrep
 npm run test:e2e
 ```
 
+GitHub Actions runs these checks with the HTTPS certificate setup in the Node
+quality job. Semgrep runs independently in the official `semgrep/semgrep`
+container on pull requests, pushes to `main`, manual dispatches, and a daily
+scheduled scan.
+
 The OpenAPI document is available at `http://localhost:8787/api/doc` during development.

@@ -20,7 +20,7 @@
     "lint": "npm run lint --workspaces --if-present",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "semgrep": "semgrep --config .semgrep.yml"
+    "semgrep": "if command -v semgrep >/dev/null 2>&1; then semgrep scan --config .semgrep.yml; else docker run --rm -v \"$PWD:/src:ro\" -w /src semgrep/semgrep semgrep scan --config .semgrep.yml; fi"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
