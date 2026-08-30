@@ -9,9 +9,29 @@ script = "./scripts/compose-up.sh"
 script = "./scripts/compose-down.sh"
 
 [[actions]]
-name = "Run Dashboard"
+name = "Run Dashboard (HTTP)"
 icon = "run"
-command = "./scripts/compose-exec.sh npm run dev"
+command = "./scripts/compose-up.sh"
+
+[[actions]]
+name = "Run Dashboard (HTTPS)"
+icon = "run"
+command = "./scripts/compose-up-https.sh"
+
+[[actions]]
+name = "Stop Dashboard"
+icon = "stop"
+command = "./scripts/compose-down.sh"
+
+[[actions]]
+name = "Restart Dashboard (HTTP)"
+icon = "run"
+command = "./scripts/compose-restart.sh"
+
+[[actions]]
+name = "Restart Dashboard (HTTPS)"
+icon = "run"
+command = "./scripts/compose-restart-https.sh"
 
 [[actions]]
 name = "Test"

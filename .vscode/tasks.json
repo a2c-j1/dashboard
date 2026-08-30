@@ -42,6 +42,80 @@
       }
     },
     {
+      "label": "Dev: Start Dashboard (HTTPS)",
+      "type": "npm",
+      "script": "dev:https",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "dashboard",
+        "pattern": [{ "regexp": "^$" }],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "https://localhost:5173"
+        }
+      },
+      "presentation": {
+        "group": "dashboard",
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Compose: Stop Dashboard",
+      "type": "shell",
+      "command": "./scripts/compose-down.sh",
+      "presentation": { "group": "dashboard-compose", "panel": "dedicated", "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Compose: Restart Dashboard (HTTP)",
+      "type": "shell",
+      "command": "./scripts/compose-restart.sh",
+      "presentation": { "group": "dashboard-compose", "panel": "dedicated", "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Compose: Restart Dashboard (HTTPS)",
+      "type": "shell",
+      "command": "./scripts/compose-restart-https.sh",
+      "presentation": { "group": "dashboard-compose", "panel": "dedicated", "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dev Container: Stop Dashboard",
+      "type": "shell",
+      "command": "./scripts/devcontainer-down.sh",
+      "presentation": {
+        "group": "dashboard-devcontainer",
+        "panel": "dedicated",
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dev Container: Restart Dashboard (HTTP)",
+      "type": "shell",
+      "command": "./scripts/devcontainer-restart.sh",
+      "presentation": {
+        "group": "dashboard-devcontainer",
+        "panel": "dedicated",
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dev Container: Restart Dashboard (HTTPS)",
+      "type": "shell",
+      "command": "./scripts/devcontainer-restart-https.sh",
+      "presentation": {
+        "group": "dashboard-devcontainer",
+        "panel": "dedicated",
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Quality: Test",
       "type": "npm",
       "script": "test",

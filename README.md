@@ -12,6 +12,11 @@ npm run prisma:migrate -w @dashboard/api
 npm run dev
 ```
 
+In VS Code, `Dev: Start Dashboard` and `Dev: Start Dashboard (HTTPS)` are
+background tasks. Stop a host-run watcher with **Tasks: Terminate Task** and
+select the corresponding task; do not use a broad `pkill`, which could stop
+unrelated work.
+
 For the containerized public stack, use the root Compose file. It publishes the
 web app on `http://localhost:5173` and the API on `http://localhost:8787`:
 
@@ -19,10 +24,29 @@ web app on `http://localhost:5173` and the API on `http://localhost:8787`:
 ./scripts/compose-up.sh
 ```
 
-Stop it with `./scripts/compose-down.sh`. `scripts/compose-exec.sh` runs a
+Stop it with `./scripts/compose-down.sh`. To switch modes safely, use
+`./scripts/compose-restart.sh` for HTTP or `./scripts/compose-restart-https.sh`
+for HTTPS; each stops the current public stack first and preserves named
+volumes. `scripts/compose-exec.sh` runs a
 command in its utility workspace container; use `npm run dev` on the host for
 the usual HTTP development workflow. Override the public host ports with
 `DASHBOARD_WEB_PORT` and `DASHBOARD_API_PORT` when needed.
+
+The Codex Docker Compose environment provides HTTP/HTTPS run, stop, and restart
+actions. The public modes intentionally share ports and cannot run at the same
+time, so use the matching restart action when switching modes.
+
+For the public Compose stack over HTTPS, use the dedicated HTTPS overlay. It
+generates the local certificate before starting the services and keeps the
+same host ports (`5173` for web and `8787` for API):
+
+```sh
+./scripts/compose-up-https.sh
+```
+
+Open `https://localhost:5173` and `https://localhost:8787/api/health`.
+Stop it with `./scripts/compose-down.sh`; do not run the HTTP and HTTPS public
+stacks at the same time because they intentionally share ports.
 
 The existing `npm run dev` command remains available for HTTP-only development.
 For HTTPS development, generate the local self-signed certificate and start both
@@ -83,6 +107,23 @@ when using Codex or another client without automatic Dev Container lifecycle
 support, then run `./scripts/devcontainer-exec.sh npm run dev`. Override its
 host ports with `DEVCONTAINER_WEB_PORT`, `DEVCONTAINER_API_PORT`,
 `DEVCONTAINER_STORAGE_PORT`, and `DEVCONTAINER_STORAGE_ADMIN_PORT`.
+For HTTPS in this environment, use `./scripts/devcontainer-up-https.sh`; it
+generates the certificate inside the workspace and starts both TLS servers.
+Open `https://localhost:5174` and `https://localhost:8788/api/health`.
+The HTTP and HTTPS commands keep the development server in the foreground. Use
+`./scripts/devcontainer-down.sh` to stop the container, or use
+`./scripts/devcontainer-restart.sh` / `./scripts/devcontainer-restart-https.sh`
+to stop, recreate, and start the selected mode. The restart commands therefore
+also remain attached to the server process until it is stopped.
+The Codex Dev Container environment keeps `Run Dashboard` for HTTP and adds
+`Run Dashboard (HTTPS)`. VS Code provides matching HTTP/HTTPS Chrome launch
+configurations. To stop or restart from Zed, use the same scripts from its
+terminal (`devcontainer-down.sh`, `devcontainer-restart.sh`, or
+`devcontainer-restart-https.sh`); no Zed-specific task configuration is
+required.
+The Dev Container and public Compose HTTPS flows use the same ignored `.certs`
+directory and local CA. Install and explicitly trust
+`.certs/localhost-ca.pem` in your browser or device to remove the warning.
 It also provides Docker access to Testcontainers through the host Docker socket.
 
 ### Integration-test sample

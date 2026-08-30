@@ -25,6 +25,21 @@
       "request": "launch",
       "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}/apps/web/src"
+    },
+    {
+      "name": "Debug Web (Chrome, HTTPS)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "https://localhost:5173",
+      "webRoot": "${workspaceFolder}/apps/web/src",
+      "preLaunchTask": "Dev: Start Dashboard (HTTPS)"
+    },
+    {
+      "name": "Debug Web (Chrome, HTTPS, existing server)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "https://localhost:5173",
+      "webRoot": "${workspaceFolder}/apps/web/src"
     }
   ],
   "compounds": [
