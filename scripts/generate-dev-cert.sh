@@ -69,6 +69,7 @@ openssl x509 -req \
   -in "$temp_dir/server.csr" \
   -CA "$ca_cert_file" \
   -CAkey "$ca_key_file" \
+  -CAserial "$temp_dir/localhost-ca.srl" \
   -CAcreateserial \
   -out "$cert_file" \
   -days "${DEV_CERT_DAYS:-30}" \
