@@ -1,0 +1,54 @@
+name: Branch topology
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  branch-topology:
+    name: branch-topology
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+      HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+    steps:
+      - name: Validate pull request route
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          base_branch="${BASE_BRANCH:-}"
+          head_branch="${HEAD_BRANCH:-}"
+          allowed=false
+
+          case "$base_branch" in
+            dev)
+              case "$head_branch" in
+                feature/*|fix/*|codex/*|main)
+                  allowed=true
+                  ;;
+              esac
+              ;;
+            main)
+              case "$head_branch" in
+                release/*|hotfix/*)
+                  allowed=true
+                  ;;
+              esac
+              ;;
+          esac
+
+          if [[ "$allowed" == true ]]; then
+            printf 'Allowed pull request route: %s -> %s\n' "$head_branch" "$base_branch"
+            exit 0
+          fi
+
+          printf 'Rejected pull request route: %s -> %s\n' "$head_branch" "$base_branch"
+          printf '%s\n' 'Expected routes:'
+          printf '%s\n' '  feature/*, fix/*, codex/*, or main -> dev'
+          printf '%s\n' '  release/* or hotfix/* -> main'
+          exit 1

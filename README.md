@@ -60,8 +60,13 @@ npm run storage:down
 ```
 
 See [development modes](docs/development-modes.md) for the prerequisites,
-trade-offs, and migration guide. The API's optional Prisma setup remains
-available for workflows that use the persistence layer:
+trade-offs, and migration guide.
+
+See the [branching strategy](docs/branching-strategy.md) for GitHub branch
+protection, pull-request targets, and release synchronization workflows.
+
+The API's optional Prisma setup remains available for workflows that use the
+persistence layer:
 
 ```sh
 npm run prisma:generate -w @dashboard/api
