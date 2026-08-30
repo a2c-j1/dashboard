@@ -6,5 +6,5 @@ export PATH="$HOME/.local/bin:$PATH"
 
 npm ci
 npm run prisma:generate -w @dashboard/api
-pip3 install --user semgrep
+PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install --force semgrep
 npx playwright install --with-deps chromium
