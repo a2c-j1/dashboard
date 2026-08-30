@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
+import { apiConfig } from './config.js';
 
 const healthResponseSchema = z
   .object({
@@ -26,5 +27,5 @@ app.openapi(healthRoute, (context) =>
 
 app.doc('/doc', {
   openapi: '3.0.0',
-  info: { title: 'Dashboard API', version: '0.1.0' },
+  info: { title: `${apiConfig.name} API`, version: apiConfig.version },
 });

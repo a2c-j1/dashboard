@@ -2,6 +2,7 @@ import * as stylex from '@stylexjs/stylex';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { getHealth } from './api.js';
+import { appConfig } from './config.js';
 
 const styles = stylex.create({
   page: {
@@ -34,13 +35,6 @@ const styles = stylex.create({
   link: { color: '#aebce2', fontSize: '0.85rem', textDecoration: 'none' },
   status: { color: '#7fe0ad', fontSize: '0.75rem' },
 });
-
-const links = [
-  ['YouTube', 'https://www.youtube.com/'],
-  ['X', 'https://x.com/'],
-  ['ChatGPT', 'https://chatgpt.com/'],
-  ['Claude', 'https://claude.ai/'],
-] as const;
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1 } } });
 
@@ -75,7 +69,7 @@ function Dashboard() {
         <span {...stylex.props(styles.status)}>
           {health.isSuccess ? 'API online' : 'API connecting…'}
         </span>
-        {links.map(([label, href]) => (
+        {appConfig.links.map(({ label, href }) => (
           <a
             {...stylex.props(styles.link)}
             key={label}
