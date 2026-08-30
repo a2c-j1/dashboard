@@ -33,10 +33,9 @@ branch. `branch-topology` rejects pull requests whose source and target do not
 match the allowed routes in the table above, so the branch flow is enforced by
 GitHub rather than relying on this document.
 
-`main` requires two approving reviews. `dev` requires one. For both branches:
+This is a single-maintainer repository, so `main` and `dev` require zero
+approving reviews while still requiring a pull request. For both branches:
 
-- approvals from the previous commit are dismissed when new commits are pushed;
-- approval of the latest push is required;
 - all pull-request conversations must be resolved;
 - force pushes and branch deletion are prohibited; and
 - administrators are subject to the rules and should not bypass them as part
@@ -55,14 +54,13 @@ Keep a branch only when it has an explicit, documented reason to remain.
 
 1. Create `feature/<issue>-<summary>` or `fix/<issue>-<summary>` from `dev`.
 2. Open a pull request back to `dev`.
-3. Wait for both required checks and the required review, resolve all comments,
-   then squash merge.
+3. Wait for both required checks, resolve all comments, then squash merge.
 4. Delete the short-lived branch.
 
 ### Release
 
 1. Create `release/<version>` from `dev` and open a pull request to `main`.
-2. After the checks and two approvals pass, squash merge into `main`.
+2. After the checks pass, squash merge into `main`.
 3. Open `main` → `dev` as a synchronization pull request and merge it with a
    merge commit after the required check and review pass.
 4. Delete the release branch.
@@ -71,7 +69,7 @@ Keep a branch only when it has an explicit, documented reason to remain.
 
 1. Create `hotfix/<issue>-<summary>` from `main` and open a pull request to
    `main`.
-2. After the checks and two approvals pass, squash merge into `main`.
+2. After the checks pass, squash merge into `main`.
 3. Open `main` → `dev` as a synchronization pull request and merge it with a
    merge commit after the required check and review pass.
 4. Delete the hotfix branch.
