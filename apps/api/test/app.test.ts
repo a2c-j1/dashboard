@@ -13,6 +13,10 @@ describe('GET /api/doc', () => {
   it('publishes the API contract', async () => {
     const response = await app.request('/api/doc');
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ openapi: '3.0.0', paths: { '/api/health': {} } });
+    expect(await response.json()).toMatchObject({
+      openapi: '3.0.0',
+      info: { title: 'Dashboard API', version: '0.1.0' },
+      paths: { '/api/health': {} },
+    });
   });
 });

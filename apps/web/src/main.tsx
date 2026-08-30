@@ -1,6 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App.js';
+import { appConfig } from './config.js';
+
+document.title = appConfig.name;
 
 const rootElement = document.getElementById('root');
 
