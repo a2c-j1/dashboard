@@ -6,6 +6,8 @@ import { defineConfig } from 'vite';
 import { readFileSync } from 'node:fs';
 
 const httpsEnabled = process.env.HTTPS === '1';
+const apiProxyTarget =
+  process.env.VITE_API_PROXY_TARGET ?? `${httpsEnabled ? 'https' : 'http'}://127.0.0.1:8787`;
 const httpsOptions = httpsEnabled
   ? {
       key: readFileSync('../../.certs/localhost-key.pem'),
@@ -35,12 +37,10 @@ const stylexStylesheet = {
 export default defineConfig({
   plugins: [stylex.vite(), react(), stylexStylesheet],
   server: {
-    host: httpsEnabled ? '0.0.0.0' : undefined,
+    host: '0.0.0.0',
     https: httpsOptions,
     proxy: {
-      '/api': httpsEnabled
-        ? { target: 'https://127.0.0.1:8787', secure: false }
-        : 'http://127.0.0.1:8787',
+      '/api': httpsEnabled ? { target: apiProxyTarget, secure: false } : apiProxyTarget,
     },
   },
   test: { environment: 'jsdom', setupFiles: './src/test-setup.ts' },

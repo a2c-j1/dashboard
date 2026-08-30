@@ -11,6 +11,44 @@ services:
     volumes:
       - seaweedfs-data:/data
 
+  api:
+    profiles: [public]
+    build:
+      context: .devcontainer
+      dockerfile: Dockerfile
+    command: npm run dev -w @dashboard/api
+    environment:
+      S3_ACCESS_KEY_ID: dashboard-dev
+      S3_BUCKET: dashboard-dev
+      S3_ENDPOINT: http://seaweedfs:8333
+      S3_REGION: us-east-1
+      S3_SECRET_ACCESS_KEY: dashboard-dev-secret
+    ports:
+      - '${DASHBOARD_API_PORT:-8787}:8787'
+    volumes:
+      - .:/workspaces/dashboard:cached
+      - workspace-node-modules:/workspaces/dashboard/node_modules
+    working_dir: /workspaces/dashboard
+    depends_on:
+      - seaweedfs
+
+  web:
+    profiles: [public]
+    build:
+      context: .devcontainer
+      dockerfile: Dockerfile
+    command: sh -c 'npm run build -w @dashboard/schemas && npm run dev -w @dashboard/web -- --host 0.0.0.0'
+    environment:
+      VITE_API_PROXY_TARGET: http://api:8787
+    ports:
+      - '${DASHBOARD_WEB_PORT:-5173}:5173'
+    volumes:
+      - .:/workspaces/dashboard:cached
+      - workspace-node-modules:/workspaces/dashboard/node_modules
+    working_dir: /workspaces/dashboard
+    depends_on:
+      - api
+
   workspace:
     build:
       context: .devcontainer
@@ -24,7 +62,9 @@ services:
       S3_SECRET_ACCESS_KEY: dashboard-dev-secret
     volumes:
       - .:/workspaces/dashboard:cached
+      - workspace-node-modules:/workspaces/dashboard/node_modules
     working_dir: /workspaces/dashboard
 
 volumes:
   seaweedfs-data:
+  workspace-node-modules:

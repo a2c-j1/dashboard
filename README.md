@@ -12,6 +12,18 @@ npm run prisma:migrate -w @dashboard/api
 npm run dev
 ```
 
+For the containerized public stack, use the root Compose file. It publishes the
+web app on `http://localhost:5173` and the API on `http://localhost:8787`:
+
+```sh
+./scripts/compose-up.sh
+```
+
+Stop it with `./scripts/compose-down.sh`. `scripts/compose-exec.sh` runs a
+command in its utility workspace container; use `npm run dev` on the host for
+the usual HTTP development workflow. Override the public host ports with
+`DASHBOARD_WEB_PORT` and `DASHBOARD_API_PORT` when needed.
+
 The existing `npm run dev` command remains available for HTTP-only development.
 For HTTPS development, generate the local self-signed certificate and start both
 servers with one command:
@@ -64,6 +76,13 @@ Open this repository with the **Reopen in Container** command. The Dev Container
 starts the same SeaweedFS service and configures the API process with
 `S3_ENDPOINT=http://seaweedfs:8333`; do not change it to `localhost` from inside
 the container. Dependencies and the Prisma client are installed automatically.
+Its workspace publishes the web app on `http://localhost:5174`, the API on
+`http://localhost:8788`, and SeaweedFS on ports 8334/23647, so it can run beside
+the public Compose stack. Start it manually with `./scripts/devcontainer-up.sh`
+when using Codex or another client without automatic Dev Container lifecycle
+support, then run `./scripts/devcontainer-exec.sh npm run dev`. Override its
+host ports with `DEVCONTAINER_WEB_PORT`, `DEVCONTAINER_API_PORT`,
+`DEVCONTAINER_STORAGE_PORT`, and `DEVCONTAINER_STORAGE_ADMIN_PORT`.
 It also provides Docker access to Testcontainers through the host Docker socket.
 
 ### Integration-test sample

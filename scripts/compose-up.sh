@@ -8,5 +8,6 @@ DASHBOARD_SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 project_name=$(dashboard_compose_project_name review)
 cd "$DASHBOARD_WORKTREE_ROOT"
 
-docker compose --project-name "$project_name" up --build --detach workspace
+docker compose --project-name "$project_name" --profile public up --build --detach workspace
 docker compose --project-name "$project_name" exec --no-TTY workspace ./scripts/bootstrap-development.sh
+docker compose --project-name "$project_name" --profile public up --detach api web
