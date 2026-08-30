@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs';
 import { createServer as createHttpsServer } from 'node:https';
 import { serve } from '@hono/node-server';
 import { app } from './app.js';
+import { apiConfig } from './config.js';
 
-const port = Number(process.env.PORT ?? 8787);
 const tlsKey = process.env.TLS_KEY;
 const tlsCert = process.env.TLS_CERT;
 const tlsOptions =
@@ -14,12 +14,12 @@ serve(
   tlsEnabled
     ? {
         fetch: app.fetch,
-        port,
+        port: apiConfig.port,
         createServer: createHttpsServer,
         serverOptions: tlsOptions,
       }
-    : { fetch: app.fetch, port },
+    : { fetch: app.fetch, port: apiConfig.port },
   () => {
-    console.info(`API listening on ${tlsEnabled ? 'https' : 'http'}://localhost:${port}`);
+    console.info(`API listening on ${tlsEnabled ? 'https' : 'http'}://localhost:${apiConfig.port}`);
   },
 );
