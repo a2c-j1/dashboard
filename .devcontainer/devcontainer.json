@@ -1,6 +1,6 @@
 {
   "name": "Dashboard Development",
-  "dockerComposeFile": ["compose.devcontainer.yaml", "../compose.yaml"],
+  "dockerComposeFile": ["../compose.yaml", "compose.devcontainer.yaml"],
   "service": "workspace",
   "workspaceFolder": "/workspaces/dashboard",
   "features": {
