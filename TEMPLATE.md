@@ -32,6 +32,12 @@ containerized development workflow:
    available. The integration suite creates disposable SQLite and S3 resources;
    it is intentionally separate from the regular `npm test` command.
 
+After choosing a mode, run `npm run bootstrap -- --yes` to create the local
+`apps/api/.env` and `apps/web/.env` files with replacement values. The command
+protects existing `.env` files and intentionally does not create storage
+credentials; configure the full-mode S3 values from `apps/api/.env.example`
+separately.
+
 The default values below describe the current example. Changing an identifier
 usually requires a coordinated replacement; changing a port or service name
 also affects proxies, Compose mappings, health checks, certificates, and test

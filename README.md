@@ -68,6 +68,17 @@ npm run prisma:generate -w @dashboard/api
 npm run prisma:migrate -w @dashboard/api
 ```
 
+When adapting this repository into a new application, use the bootstrap command
+to create local environment files with replacement values. It never overwrites
+an existing `.env` file and does not generate storage credentials:
+
+```sh
+npm run bootstrap -- --yes --name "My App" --web-name "My App Dashboard"
+```
+
+Use `npm run bootstrap -- --help` for the available options. Copy the storage
+values from `apps/api/.env.example` separately before using the full mode.
+
 The first start may take a moment while the services and generated Prisma
 client become ready. The links in the dashboard open external sites in a new
 browser tab.
