@@ -24,25 +24,48 @@ Dashboard example.
 
 ## Quick start
 
-Requirements: Node.js 24, npm, and Docker (for the local object-storage
-service).
+Choose the development mode that matches what you need. The minimal mode only
+requires Node.js 24 and npm; it starts the web app and API with local defaults,
+without Docker, certificates, or object storage:
 
 ```sh
 npm install
-npm run storage:up
-npm run prisma:generate -w @dashboard/api
-npm run prisma:migrate -w @dashboard/api
-npm run dev
+npm run dev:minimal
 ```
 
 Then open [http://localhost:5173](http://localhost:5173). The API is available
 at [http://localhost:8787/api/health](http://localhost:8787/api/health), and its
 OpenAPI document is at [http://localhost:8787/api/doc](http://localhost:8787/api/doc).
 
-When you are finished, stop the object-storage service with:
+`npm run dev` remains an alias for the minimal mode for compatibility.
+
+For the full local mode, which enables the existing SeaweedFS-backed setup,
+use Docker and start it explicitly:
+
+```sh
+npm run dev:full
+```
+
+The full HTTPS mode also creates the local development certificate:
+
+```sh
+npm run dev:full:https
+```
+
+When you are finished with either full mode, stop the object-storage service
+with:
 
 ```sh
 npm run storage:down
+```
+
+See [development modes](docs/development-modes.md) for the prerequisites,
+trade-offs, and migration guide. The API's optional Prisma setup remains
+available for workflows that use the persistence layer:
+
+```sh
+npm run prisma:generate -w @dashboard/api
+npm run prisma:migrate -w @dashboard/api
 ```
 
 The first start may take a moment while the services and generated Prisma
