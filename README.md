@@ -9,6 +9,11 @@ This repository is for people who want to try the dashboard locally or
 continue developing it. It contains a React/Vite frontend and a Hono API in an
 npm workspace.
 
+If you are adapting this repository into another application, start with the
+[template adoption guide](TEMPLATE.md) for the replacement checklist and the
+minimal/full mode decision. This README remains the runnable guide for the
+Dashboard example.
+
 ## What you can try
 
 - Watch the clock update every second in your browser's local time.
