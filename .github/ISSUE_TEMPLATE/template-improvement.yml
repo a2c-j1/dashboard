@@ -59,12 +59,12 @@ body:
       label: 品質確認
       description: 必要な確認方法を選択し、補足があれば下欄に記入してください。
       options:
-        - label: "`npm run format:check`"
-        - label: "`npm run lint`"
-        - label: "`npm test`"
-        - label: "`npm run build`"
-        - label: "`npm run test:e2e`"
-        - label: "`npm run semgrep`（セキュリティ関連の場合）"
+        - label: '`npm run format:check`'
+        - label: '`npm run lint`'
+        - label: '`npm test`'
+        - label: '`npm run build`'
+        - label: '`npm run test:e2e`'
+        - label: '`npm run semgrep`（セキュリティ関連の場合）'
 
   - type: textarea
     id: quality-notes
